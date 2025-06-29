@@ -1,0 +1,24 @@
+
+body {
+  font-family: sans-serif;
+  background: #f4f4f9;
+  color: #333;
+  margin: 0;
+  padding: 0 1em;
+}
+header, footer {
+  text-align: center;
+  padding: 1em;
+  background: #317EFB;
+  color: white;
+}
+h1, h2 {
+  margin: 0.5em 0;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  padding: 0.25em 0;
+}

@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#317EFB"/>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Cooperstown Checklist</title>
+</head>
+<body>
+  <header>
+    <h1>🏆 Cooperstown Packing List</h1>
+    <p>Everything your 12-year-old needs for a week at the tournament.</p>
+  </header>
+  <main>
+    <section>
+      <h2>🧢 Baseball Gear</h2>
+      <ul>
+        <li><input type="checkbox" /> Bats, Glove, Batting Gloves</li>
+        <li><input type="checkbox" /> Helmet, Catcher's Gear</li>
+        <li><input type="checkbox" /> Cleats (Rubber only), Athletic Cup</li>
+      </ul>
+    </section>
+    <section>
+      <h2>🛌 Dorm Supplies</h2>
+      <ul>
+        <li><input type="checkbox" /> Pillow, Twin Sheets, Blanket/Sleeping Bag</li>
+        <li><input type="checkbox" /> Clip-on Fan, Plastic Hooks</li>
+      </ul>
+    </section>
+    <section>
+      <h2>🧼 Toiletries & Health</h2>
+      <ul>
+        <li><input type="checkbox" /> Toothbrush, Deodorant, 3-in-1 Shampoo</li>
+        <li><input type="checkbox" /> Sunscreen, Gold Bond, Shower Shoes</li>
+        <li><input type="checkbox" /> Meds, First Aid Kit</li>
+      </ul>
+    </section>
+    <section>
+      <h2>🎒 Clothing</h2>
+      <ul>
+        <li><input type="checkbox" /> Casual Outfits, Pajamas</li>
+        <li><input type="checkbox" /> Light Jacket, Flip-Flops, Extra Socks</li>
+      </ul>
+    </section>
+    <section>
+      <h2>🎯 Extras</h2>
+      <ul>
+        <li><input type="checkbox" /> Snacks, Water, Pin Bag</li>
+        <li><input type="checkbox" /> Extension Cords, Laundry Bag</li>
+      </ul>
+    </section>
+    <section>
+      <h2>👨‍👩‍👧 Parent View</h2>
+      <ul>
+        <li><input type="checkbox" /> Lawn Chairs or Stadium Cushions</li>
+        <li><input type="checkbox" /> Portable Cooler or Snacks</li>
+        <li><input type="checkbox" /> Cash for Concessions</li>
+        <li><input type="checkbox" /> Umbrella or Shade Tent</li>
+        <li><input type="checkbox" /> Team Dinner Planning</li>
+      </ul>
+    </section>
+    <section>
+      <h2>📍 Pin Trading Tracker</h2>
+      <form id="pinForm">
+        <input type="text" id="pinName" placeholder="Enter Pin Name" />
+        <button type="submit">Add Pin</button>
+      </form>
+      <ul id="pinList"></ul>
+    </section>
+  </main>
+  <footer>
+    <p>✅ Checklist auto-saves locally. Share with teammates and parents!</p>
+  </footer>
+  <script>
+    document.querySelectorAll("input[type='checkbox']").forEach(box => {
+      const key = box.parentElement.textContent.trim();
+      box.checked = localStorage.getItem(key) === "true";
+      box.addEventListener("change", () => localStorage.setItem(key, box.checked));
+    });
+
+    const pinForm = document.getElementById("pinForm");
+    const pinList = document.getElementById("pinList");
+
+    const loadPins = () => {
+      pinList.innerHTML = "";
+      const pins = JSON.parse(localStorage.getItem("pins") || "[]");
+      pins.forEach((pin, index) => {
+        const li = document.createElement("li");
+        li.textContent = pin;
+        li.onclick = () => {
+          pins.splice(index, 1);
+          localStorage.setItem("pins", JSON.stringify(pins));
+          loadPins();
+        };
+        pinList.appendChild(li);
+      });
+    };
+
+    pinForm.onsubmit = (e) => {
+      e.preventDefault();
+      const pinName = document.getElementById("pinName").value.trim();
+      if (pinName) {
+        const pins = JSON.parse(localStorage.getItem("pins") || "[]");
+        pins.push(pinName);
+        localStorage.setItem("pins", JSON.stringify(pins));
+        document.getElementById("pinName").value = "";
+        loadPins();
+      }
+    };
+
+    loadPins();
+  </script>
+</body>
+</html>
